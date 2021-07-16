@@ -1,5 +1,7 @@
 package com.intelliware.instantappdatagramsocket.ui.home;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,22 +34,46 @@ public class HomeFragment extends Fragment {
 
         final TextView textView = binding.textHome;
 
-        String text = "This is home fragment";
-        textView.setText(text);
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Simple app that opens a DatagramSocket\n");
+        buffer.append("Expected it to work for both Apps and for Instant Apps.\n");
+        buffer.append("Please run for both the 'App' and the 'Instant App' Run Configurations.\n");
+        buffer.append("See HomeFragment class for DatagramSocket usage.\n");
+        buffer.append("\n--\n\n");
+
+        boolean isInstantApp = getContext().getPackageManager().isInstantApp();
+        buffer.append("Running as Instant App = " + isInstantApp +"\n");
+
+        boolean isInternetPermissionEnabled = getContext().checkSelfPermission(Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED;
+        buffer.append("INTERNET permission enabled = "+isInternetPermissionEnabled+"\n");
+
+        buffer.append("\n--\n");
+        buffer.append("Creating DatagramSocket....\n");
+
+        String openDatagramSocketResult = openDatagramSocket();
+        buffer.append(openDatagramSocketResult);
+
+        buffer.append("\n");
+        buffer.append("See app log for more details");
+
+        textView.setText(buffer.toString());
 
         openDatagramSocket();
 
         return root;
     }
 
-    public void openDatagramSocket() {
-        DatagramSocket datagramSocket = null;
+    public String openDatagramSocket() {
+        Log.i(TAG, "_-----------------------------------------------");
+        Log.i(TAG, "Creating DatagramSocket....");
         try {
-            datagramSocket = new DatagramSocket();
-            Log.i(TAG, "Created datagramSocket: "+datagramSocket);
+            DatagramSocket datagramSocket = new DatagramSocket();
+            Log.i(TAG, "Created datagramSocket: "+datagramSocket+" OK");
+            return "Datagram socket created OK";
         } catch (SocketException e1) {
             Log.w(TAG, "Failed to create datagram socket: "+e1);
             e1.printStackTrace();
+            return "Datagram socket failed with exception: "+e1;
         }
     }
 
