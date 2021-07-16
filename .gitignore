@@ -1,0 +1,14 @@
+*.iml
+.gradle
+/local.properties
+.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.idea/
+/prowirelib/build
+# Ignore proguard configured output
+app/out.configuration
+app/out.map
+app/release
