@@ -1,6 +1,7 @@
 package com.intelliware.instantappdatagramsocket.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.intelliware.instantappdatagramsocket.R;
 import com.intelliware.instantappdatagramsocket.databinding.FragmentHomeBinding;
 
+import java.net.DatagramSocket;
+import java.net.SocketException;
+
 public class HomeFragment extends Fragment {
+    private static final String TAG = "HomeFragment";
 
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
@@ -35,7 +40,21 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        openDatagramSocket();
+
         return root;
+    }
+
+    public void openDatagramSocket() {
+        DatagramSocket datagramSocket = null;
+        try {
+            datagramSocket = new DatagramSocket();
+            Log.i(TAG, "Created datagramSocket: "+datagramSocket);
+        } catch (SocketException e1) {
+            Log.w(TAG, "Failed to create datagram socket: "+e1);
+            e1.printStackTrace();
+        }
     }
 
     @Override
